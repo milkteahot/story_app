@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'customIcons.dart';
+import 'data.dart';
+import 'dart:math';
 
 void main() =>
 //  runApp(MyApp());
@@ -13,16 +15,29 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+var cardAspectRatio = 12.0 / 16.0;
+var widgetAspectRatio = cardAspectRatio * 1.2;
+
 class _MyAppState extends State<MyApp> {
+  var currentPage = images.length - 1.0;
+
   @override
   Widget build(BuildContext context) {
+    PageController controller = PageController(initialPage: images.length - 1);
+    controller.addListener(() {
+      setState(() {
+        currentPage = controller.page;
+      });
+    });
+
     return Scaffold(
       backgroundColor: Color(0xFF2d3447),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 30.0, bottom: 8.0),
+              padding: const EdgeInsets.only(
+                  left: 12.0, right: 12.0, top: 30.0, bottom: 8.0),
               child: Row(
                 children: <Widget>[
                   IconButton(
@@ -31,9 +46,7 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.white,
                       size: 30.0,
                     ),
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                   IconButton(
                     icon: Icon(
@@ -41,23 +54,23 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.white,
                       size: 30.0,
                     ),
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal:  20.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text("Trending",
+                  Text(
+                    "Trending",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 46.0,
-                      fontFamily: "Calibre-Semibold",
+                      fontFamily: "Raleway",
+                      fontWeight: FontWeight.bold,
                       letterSpacing: 1.0,
                     ),
                   ),
@@ -67,12 +80,125 @@ class _MyAppState extends State<MyApp> {
                       size: 30.0,
                       color: Colors.white,
                     ),
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   )
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFff6e6e),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 22.0, vertical: 6.0),
+                        child: Text(
+                          "Animated",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.0,
+                  ),
+                  Text(
+                    "25+ Stories",
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ],
+              ),
+            ),
+            Stack(
+              children: <Widget>[
+                CardScrollWidget(currentPage),
+                Positioned.fill(
+                  child: PageView.builder(
+                    itemCount: images.length,
+                    controller: controller,
+                    reverse: true,
+                    itemBuilder: (context, index) {
+                      return Container();
+                    },
+                  ),
+                )
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Favourite",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 46.0,
+                      fontFamily: "Raleway",
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.more_horiz,
+                      size: 30.0,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {},
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 22.0, vertical: 6.0),
+                        child: Text(
+                          "Lateset",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.0,
+                  ),
+                  Text(
+                    "25+ Stories",
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20.0,),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset(images[1],
+                      width: 150.0, height: 200.0,
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         ),
@@ -81,115 +207,119 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+class CardScrollWidget extends StatelessWidget {
+  var currentPage;
+  var padding = 20.0;
+  var verticalInset = 20.0;
 
-//class MyApp extends StatelessWidget {
-//  // This widget is the root of your application.
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: 'Flutter Demo',
-//      theme: ThemeData(
-//        // This is the theme of your application.
-//        //
-//        // Try running your application with "flutter run". You'll see the
-//        // application has a blue toolbar. Then, without quitting the app, try
-//        // changing the primarySwatch below to Colors.green and then invoke
-//        // "hot reload" (press "r" in the console where you ran "flutter run",
-//        // or simply save your changes to "hot reload" in a Flutter IDE).
-//        // Notice that the counter didn't reset back to zero; the application
-//        // is not restarted.
-//        primarySwatch: Colors.blue,
-//        // This makes the visual density adapt to the platform that you run
-//        // the app on. For desktop platforms, the controls will be smaller and
-//        // closer together (more dense) than on mobile platforms.
-//        visualDensity: VisualDensity.adaptivePlatformDensity,
-//      ),
-//      home: MyHomePage(title: 'Flutter Demo Home Page'),
-//    );
-//  }
-//}
-//
-//class MyHomePage extends StatefulWidget {
-//  MyHomePage({Key key, this.title}) : super(key: key);
-//
-//  // This widget is the home page of your application. It is stateful, meaning
-//  // that it has a State object (defined below) that contains fields that affect
-//  // how it looks.
-//
-//  // This class is the configuration for the state. It holds the values (in this
-//  // case the title) provided by the parent (in this case the App widget) and
-//  // used by the build method of the State. Fields in a Widget subclass are
-//  // always marked "final".
-//
-//  final String title;
-//
-//  @override
-//  _MyHomePageState createState() => _MyHomePageState();
-//}
-//
-//class _MyHomePageState extends State<MyHomePage> {
-//  int _counter = 0;
-//
-//  void _incrementCounter() {
-//    setState(() {
-//      // This call to setState tells the Flutter framework that something has
-//      // changed in this State, which causes it to rerun the build method below
-//      // so that the display can reflect the updated values. If we changed
-//      // _counter without calling setState(), then the build method would not be
-//      // called again, and so nothing would appear to happen.
-//      _counter++;
-//    });
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    // This method is rerun every time setState is called, for instance as done
-//    // by the _incrementCounter method above.
-//    //
-//    // The Flutter framework has been optimized to make rerunning build methods
-//    // fast, so that you can just rebuild anything that needs updating rather
-//    // than having to individually change instances of widgets.
-//    return Scaffold(
-//      appBar: AppBar(
-//        // Here we take the value from the MyHomePage object that was created by
-//        // the App.build method, and use it to set our appbar title.
-//        title: Text(widget.title),
-//      ),
-//      body: Center(
-//        // Center is a layout widget. It takes a single child and positions it
-//        // in the middle of the parent.
-//        child: Column(
-//          // Column is also a layout widget. It takes a list of children and
-//          // arranges them vertically. By default, it sizes itself to fit its
-//          // children horizontally, and tries to be as tall as its parent.
-//          //
-//          // Invoke "debug painting" (press "p" in the console, choose the
-//          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-//          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-//          // to see the wireframe for each widget.
-//          //
-//          // Column has various properties to control how it sizes itself and
-//          // how it positions its children. Here we use mainAxisAlignment to
-//          // center the children vertically; the main axis here is the vertical
-//          // axis because Columns are vertical (the cross axis would be
-//          // horizontal).
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Text(
-//              'You have pushed the button this many times:',
-//            ),
-//            Text(
-//              '$_counter',
-//              style: Theme.of(context).textTheme.headline4,
-//            ),
-//          ],
-//        ),
-//      ),
-//      floatingActionButton: FloatingActionButton(
-//        onPressed: _incrementCounter,
-//        tooltip: 'Increment',
-//        child: Icon(Icons.add),
-//      ), // This trailing comma makes auto-formatting nicer for build methods.
-//    );
-//  }
-//}
+  CardScrollWidget(this.currentPage);
+
+  @override
+  Widget build(BuildContext context) {
+    return new AspectRatio(
+      aspectRatio: widgetAspectRatio,
+      child: LayoutBuilder(
+        builder: (context, contraints) {
+          var width = contraints.maxWidth;
+          var height = contraints.maxHeight;
+
+          var safeWidth = width - 2 * padding;
+          var safeHeight = height - 2 * padding;
+
+          var heightOfPrimaryCard = safeHeight;
+          var widthOfPrimaryCard = heightOfPrimaryCard * cardAspectRatio;
+
+          var primaryCardLeft = safeWidth - widthOfPrimaryCard;
+          var horizontalInset = primaryCardLeft / 2;
+
+          List<Widget> cardList = new List();
+
+          for (var i = 0; i < images.length; i++) {
+            var delta = i - currentPage;
+            bool isOnRight = delta > 0;
+
+            var start = padding +
+                max(
+                    primaryCardLeft -
+                        horizontalInset * -delta * (isOnRight ? 15 : 1),
+                    0.0);
+
+            var cardItem = Positioned.directional(
+              top: padding + verticalInset * max(-delta, 0.0),
+              bottom: padding + verticalInset * max(-delta, 0.0),
+              start: start,
+              textDirection: TextDirection.rtl,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Container(
+                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(3.0, 6.0),
+                        blurRadius: 10.0)
+                  ]),
+                  child: AspectRatio(
+                    aspectRatio: cardAspectRatio,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        Image.asset(images[i], fit: BoxFit.cover),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8.0
+                                ),
+                                child: Text(title[i],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontFamily: "Raleway",
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0,),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12.0, bottom: 12.0),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 22.0, vertical: 6.0
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueAccent,
+                                    borderRadius: BorderRadius.circular(20.0)
+                                  ),
+                                  child: FlatButton(
+                                      child: Text("Read Later", style: TextStyle(color: Colors.white)),
+                                    onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ItemDetail()),
+                                        );
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+            cardList.add(cardItem);
+          }
+          return Stack(
+            children: cardList,
+          );
+        },
+      ),
+    );
+  }
+}
